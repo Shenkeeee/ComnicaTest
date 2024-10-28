@@ -9,6 +9,7 @@ A projekt telepítéséhez szükséges parancsok:
 
 ```bash
 git clone https://github.com/Shenkeeee/ComnicaTest.git
+cd ComnicaTest
 npm install
 npm start
 ```
