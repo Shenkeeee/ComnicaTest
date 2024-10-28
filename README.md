@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# Comnica Frontend Fejlesztői Teszt Megoldás
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. Webfelület elkészítése
+**Framework választás:** React
 
-## Available Scripts
+[**Megtekintés**](https://comnica-signature.vercel.app/)
 
-In the project directory, you can run:
+## 2. Gomb Események Hiányának Lehetséges Okai
 
-### `npm start`
+**Legvalószínűbb ok:**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Egy láthatatlan vagy átlátszó elem van a gomb fölött, ami miatt nem érzékeli az eseményeket, például a z-index beállítás miatt.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 3. Felhasználók és Színek Lekérése
 
-### `npm test`
+```javascript
+async function fetchUsersAndAssignColors() {
+  try {
+    // Felhasználók lekérése
+    const usersResponse = await fetch('https://api.example.com/users');
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    if (!usersResponse.ok) {
+      throw new Error('Failed to fetch users');
+    }
 
-### `npm run build`
+    const users = await usersResponse.json();
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    if (users.length === 0) {
+      console.warn('No users available');
+      return;
+    }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    // Színek lekérése
+    const colorsResponse = await fetch('https://api.example.com/colors');
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    if (!colorsResponse.ok) {
+      throw new Error('Failed to fetch colors');
+    }
 
-### `npm run eject`
+    const colors = await colorsResponse.json();
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    const availableColors = [...colors];
+    const usersWithColors = users.map(user => {
+      if (availableColors.length === 0) {
+        console.warn('No more colors available');
+        return { ...user, color: null };
+      }
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+      // Szín véletlenszerű kiválasztása az elérhetőekből
+      const randomIndex = Math.floor(Math.random() * availableColors.length);
+      const chosenColor = availableColors[randomIndex];
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+      // A kiválasztott szín eltávolítása az elérhetőekből
+      availableColors.splice(randomIndex, 1);
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+      return {
+        ...user,
+        color: chosenColor,
+      };
+    });
 
-## Learn More
+    console.log(usersWithColors);
+  } catch (error) {
+    console.error(error.message);
+  } finally {
+    console.log('Fetch process completed.');
+  }
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 4. Floating Label Problémák
 
-### Code Splitting
+Néhány példa:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. A lebegő címkék animációja zavaró lehet, különösen, ha túl gyors vagy túl lassú.
 
-### Analyzing the Bundle Size
+2. Ha a lebegő címke színe nem kontrasztos a háttérrel, nehezen látható. Ez különösen problémás lehet a gyengénlátó vagy fogyatékkal élő felhasználók számára.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+3. A felhasználók azt hihetik, hogy a mező már ki van töltve.
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Záró Megjegyzés 
 
-### Advanced Configuration
+Köszönöm a lehetőséget, szép napot! 🫡✌️
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Máté
