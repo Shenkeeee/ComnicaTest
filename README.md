@@ -5,6 +5,14 @@
 
 [**Megtekintés**](https://comnica-signature.vercel.app/)
 
+A projekt telepítéséhez szükséges parancsok:
+
+```bash
+git clone https://github.com/Shenkeeee/ComnicaTest.git
+npm install
+npm start
+```
+
 ## 2. Gomb Események Hiányának Lehetséges Okai
 
 **Legvalószínűbb ok:**
