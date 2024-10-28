@@ -6,6 +6,7 @@
   width: 490px;
   background-color: var(--sidebar-background);
   padding: 55px;
+  animation: slideInRight 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 #sidebar h1 {
@@ -34,12 +35,35 @@
   background-color: var(--button-bg-hover-color);
 }
 
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 1024px), (max-height: 700px) {
   #sidebar {
     width: 100%;
     height: auto;
     position: relative;
     padding: 2rem;
+    animation-name: slideInDown;
   }
 
   #sidebar h1 {
